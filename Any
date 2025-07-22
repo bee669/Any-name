@@ -1,0 +1,45 @@
+local eggName = "anti bee"
+local desiredRarity = {"divine", "prismatic"}  
+
+local function getEggs()
+    for i,v in pairs(game:GetService("Workspace").Eggs:GetChildren()) do
+        if v.Name == eggName then
+            return v
+        end
+    end
+end
+
+local function openEgg()
+    local egg = getEggs()
+    if egg then
+        local args = {
+            [1] = eggName,
+            [2] = 1  -- Number of eggs to open
+        }
+
+        game:GetService("ReplicatedStorage").Remotes.OpenEgg:InvokeServer(unpack(args))
+    end
+end
+
+local function checkInventory()
+    local pets = game:GetService("Players").LocalPlayer.PlayerGui.Inventory.Pets:GetChildren()
+    for _,pet in pairs(pets) do
+        for _,rarity in ipairs(desiredRarity) do
+            if pet.Rarity.Value == rarity then
+                print("🎉 RARE PET FOUND: " .. pet.Name)
+                return true
+            end
+        end
+    end
+    return false
+end
+
+-- Main loop: open eggs until rare pet is found
+while task.wait(1) do
+    openEgg()
+    task.wait(2)  -- Wait for animation or result
+    if checkInventory() then
+        print("Stopping script - rare pet acquired!")
+        break
+    end
+end
