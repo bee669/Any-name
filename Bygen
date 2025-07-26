@@ -1,0 +1,55 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RerollEvent = ReplicatedStorage:WaitForChild("RerollEvent") -- Replace "RerollEvent" with the actual name of the RemoteEvent
+
+local function reroll()
+  if RerollEvent then
+    RerollEvent:FireServer()
+  else
+    print("Error: RerollEvent not found.")
+  end
+end
+
+-- Auto-reroll (optional - uncomment to enable)
+-- local rerollInterval = 5 -- Reroll every 5 seconds
+-- while true do
+--   reroll()
+--   wait(rerollInterval)
+-- end
+
+-- Manual reroll (bind to a key)
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local UserInputService = game:GetService("UserInputService")
+
+UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
+  if not gameProcessedEvent then
+    if input.KeyCode == Enum.KeyCode.R then -- Change 'R' to your desired key
+      reroll()
+    end
+  end
+end)
+
+
+--Improved Error Handling and Confirmation
+
+local function rerollWithConfirmation()
+    if RerollEvent then
+        local confirmed = game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.Space) --Change to your desired confirmation key
+        if confirmed then
+            RerollEvent:FireServer()
+            print("Rerolling...")
+        else
+            print("Press Space to confirm reroll.")
+        end
+    else
+        print("Error: RerollEvent not found. Check the name of the RemoteEvent in ReplicatedStorage.")
+    end
+end
+
+UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
+  if not gameProcessedEvent then
+    if input.KeyCode == Enum.KeyCode.R then -- Change 'R' to your desired key
+      rerollWithConfirmation()
+    end
+  end
+end)
